@@ -9,8 +9,6 @@ angular.module('myApp.services', [])
         var service = {};
 
         service.pathUrl = 'http://frontendtest.entradasatualcance.com/api/v1/';
-        service.accessToken = null;
-        service.refreshToken = null;
 
         service.login = login;
         service.events = events;
@@ -24,19 +22,11 @@ angular.module('myApp.services', [])
             var defer = $q.defer();
             var promise = defer.promise;
 
-            $http.post(service.pathUrl+'oauth/token/user', {"username": user.username,"password": user.password}).
-                then(function(data){
-                    // service.accessToken = data.data.access_token;
-                    // service.refreshToken = data.data.refresh_token;
-                    $http.defaults.headers.common['Authorization'] = 'Bearer '+data.data.accessToken;
-
-                    defer.resolve(true);
-                }).
-                catch(function(error){
-                    // service.accessToken = null;
-                    // service.refreshToken = null;
-                    $http.defaults.headers.common['Authorization'] = '';
-
+            $http.post(service.pathUrl+'oauth/token/user', {"username": user.username,"password": user.password})
+                .then(function(data){
+                    defer.resolve(data.data.access_token);
+                })
+                .catch(function(error){
                     defer.reject(error);
                 })
 

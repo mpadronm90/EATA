@@ -3,7 +3,7 @@
  */
 'use strict';
 
-angular.module('myApp.viewAuth', ['ngRoute', 'myApp.services'])
+angular.module('myApp.viewAuth', ['ngRoute', 'myApp.services', 'http-auth-interceptor'])
 
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider
@@ -13,20 +13,20 @@ angular.module('myApp.viewAuth', ['ngRoute', 'myApp.services'])
             });
     }])
 
-    .controller('ViewAuth', ['$scope', 'apiEata', '$http'   , function($scope, apiEata, $http) {
+    .controller('ViewAuth', ['$scope', 'apiEata', 'authService'   , function($scope, apiEata, authService) {
         $scope.user = {}
         $scope.login = login
 
-        init()
-
         function login(isValid){
+
             if(isValid) {
-                apiEata.login($scope.user).then(function (data) {
-                    console.log(data)
+                apiEata.login($scope.user).then(function (token) {
+                    console.log(token)
+                    authService.loginConfirmed([token]);
 
                 }).catch(function (error) {
-                    $scope.messages = "Usuario o password incorrecto";
                     console.log(error)
+                    $scope.messages = "Usuario o password incorrecto "+error.message;
                 })
             }
             else{
@@ -34,7 +34,6 @@ angular.module('myApp.viewAuth', ['ngRoute', 'myApp.services'])
             }
         }
 
-        function init(){
-            $http.defaults.headers.common['Authorization'] = '';
-        }
+
+
     }]);
