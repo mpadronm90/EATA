@@ -1,0 +1,72 @@
+
+<div class="container-fluid col-sm-8 col-sm-offset-2">
+    <div ng-show="!car[0]" class="card">
+        <div class="card-block">
+            <h1 class="card-title">Upss...</h1>
+            <hr/>
+            <h5 class="card-text">Estamos llenos de sorpresas. Accede a nuestros eventos y traetelas por acá.</h5>
+            <hr/>
+            <a href="#!/viewEvents" class="btn btn-outline-primary" >Eventos</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4 mb-3">
+            <div ng-show="car[0]" class="card">
+                <div class="card-block">
+                    <h4 class="card-title">Compra ya!</h4>
+                    <hr/>
+                    <h6 class="card-text">Total: {{car | sumPriceChoose | currency: "€"}}</h6>
+                    <hr/>
+                    <form name="orderForm" ng-submit="buy()" novalidate>
+                        <!--<div id="messages" class="alert alert-danger" ng-show="messages" ng-bind="messages"></div>-->
+                        <div class="form-group" ng-class="order.name == null? 'has-danger' : 'has-success'">
+                            <label for="name">Nombre</label>
+                            <input type="text" class="form-control danger" id="name" name="name" ng-model="order.name" ng-change="messages=null" required/>
+
+                        </div>
+                        <div class="form-group" ng-class="order.lastname == null? 'has-danger' : 'has-success'">
+                            <label for="lastname">Apellidos</label>
+                            <input type="text" class="form-control" id="lastname" name="lastname"  ng-model="order.lastname" ng-change="messages=null" required/>
+                        </div>
+                        <div class="form-group" ng-class="(orderForm.name.$touched && order.documentId == null)? 'has-danger' : 'has-success'">
+                            <label for="documentId">Documento de identidad</label>
+                            <input type="text" class="form-control" id="documentId" name="documentId"  ng-model="order.documentId" ng-change="messages=null" required/>
+                        </div>
+                        <div class="form-group" ng-class="(orderForm.name.$touched && order.zipcode == null)? 'has-danger' : 'has-success'">
+                            <label for="zipcode">Código Póstal</label>
+                            <input type="number" class="form-control" id="zipcode" name="zipcode"  ng-model="order.zipcode" ng-change="messages=null" required/>
+                        </div>
+
+                        <button type="submit" ng-disabled="orderForm.$invalid"  class="btn btn-outline-primary" >Realizar Pedido</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <hr/>
+        <div class="col-sm-8">
+            <div class="card mb-3" ng-repeat="ticket in car | Customfilter | orderBy: 'event.date' | orderBy: 'name'">
+                <div class="card-block">
+                    <blockquote class="card-blockquote">
+                        <div class="row">
+                            <div class="col-sm-1">
+                                <input type="checkbox" ng-init="ticket.choose = true" ng-model="ticket.choose"></input>
+                            </div>
+                            <div class="col-sm-3">
+                                <h3 class="card-title">{{ticket.event.name}}</h3>
+                                <p class="card-text">{{ticket.event.date | date: "dd/MM/yyyy"}}</p>
+                            </div>
+                            <div class="col-sm-5">
+                                <h5 class="card-title">{{ticket.name}}</h5>
+                                <p class="card-text">Cantidad: {{ticket.toBuy}}</p>
+                            </div>
+                            <div class="col-sm-2">
+                                <a class="btn btn-outline-danger" ng-click="remove(ticket)"><i class="fa fa-trash-o fa-lg" aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -3,7 +3,7 @@
  */
 'use strict';
 
-angular.module('myApp.viewAuth', ['ngRoute', 'myApp.services', 'http-auth-interceptor'])
+angular.module('myApp.viewAuth', ['ngRoute', 'myApp.services'])
 
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider
@@ -13,27 +13,43 @@ angular.module('myApp.viewAuth', ['ngRoute', 'myApp.services', 'http-auth-interc
             });
     }])
 
-    .controller('ViewAuth', ['$scope', 'apiEata', 'authService'   , function($scope, apiEata, authService) {
+    .controller('ViewAuth', ['$scope', 'apiEata', '$location', '$cookieStore','$rootScope', function($scope, apiEata, $location, $cookieStore, $rootScope) {
         $scope.user = {}
         $scope.login = login
 
+        init()
+
+        function init(){
+            if($cookieStore.get('userSession'))
+                $scope.user = {'username': $cookieStore.get('userSession').user, 'password': $cookieStore.get('userSession').pass}
+        }
+
         function login(isValid){
-
             if(isValid) {
-                apiEata.login($scope.user).then(function (token) {
-                    console.log(token)
-                    authService.loginConfirmed([token]);
-
+                apiEata.login($scope.user).then(function (data) {
+                    refreshSession(data)
+                    $location.url('/viewEvents')
                 }).catch(function (error) {
                     console.log(error)
-                    $scope.messages = "Usuario o password incorrecto "+error.message;
+                    $scope.messages = "Usuario y/o password contraseña incorrectos";
                 })
             }
             else{
-                $scope.messages = "Rellene los campos de forma correcta";
+                $scope.messages = "Usuario y contraseña obligatorios";
             }
         }
 
+        function refreshSession(data){
+            if(!$cookieStore.get('userSession')){
+                $cookieStore.put('userSession', {})
+            }
 
+            var userSession = {'user':$scope.user.username, 'access_token': data.data.access_token, 'refresh_token': data.data.refresh_token};
+
+            $scope.user.remember == true ? userSession.pass = $scope.user.password : userSession.pass = '';
+            $cookieStore.get('userSession').user !== $scope.user.username ? $cookieStore.remove('car') : $rootScope.car = $cookieStore.get('car');
+            $cookieStore.put('userSession', userSession);
+            console.log($cookieStore.get('userSession'))
+        }
 
     }]);

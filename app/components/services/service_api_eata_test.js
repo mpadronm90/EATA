@@ -4,13 +4,22 @@
 'use strict';
 
 describe('myApp.services Api Eata', function() {
-    var apiEata, httpBackend;
+    var apiEata, httpBackend, $cookieStore;
 
     beforeEach(module('myApp.services'));
 
-    beforeEach(inject(function (_apiEata_, $httpBackend) {
+    beforeEach(angular.mock.module('ngCookies'));
+
+    beforeEach(inject(function (_apiEata_, $httpBackend, _$cookieStore_) {
         apiEata = _apiEata_;
         httpBackend = $httpBackend;
+        $cookieStore = _$cookieStore_;
+
+        $cookieStore.put('userSession', {
+                    'access_token': "YjY1MzMyODViNWU1NzM5ZDFjMmRhNTlmM2M2N2QyZmI5Mjc4ZWQxMmM4N2I5ZmY4MjBiMjRjYjQwNTBmZTE2MA",
+                    'refresh_token': "YjY1MzMyODViNWU1NzM5ZDFjMmRhNTlmM2M2N2QyZmI5Mjc4ZWQxMmM4N2I5ZmY4MjBiMjRjYjQwNTBmZTE2MA"
+                });
+
     }));
 
 
@@ -69,10 +78,15 @@ describe('myApp.services Api Eata', function() {
                     "refresh_token": "YjY1MzMyODViNWU1NzM5ZDFjMmRhNTlmM2M2N2QyZmI5Mjc4ZWQxMmM4N2I5ZmY4MjBiMjRjYjQwNTBmZTE2MA"
                 }
             ]);
-            apiEata.events().then(function(data) {
+            apiEata.login({"username" : "mpadronm90", "password" : "mpadronm90"}).then(function(data) {
                 expect(data).toEqual("YjY1MzMyODViNWU1NzM5ZDFjMmRhNTlmM2M2N2QyZmI5Mjc4ZWQxMmM4N2I5ZmY4MjBiMjRjYjQwNTBmZTE2MA");
             });
-            httpBackend.flush();
+            //httpBackend.flush();
+        });
+
+        afterEach(function() {
+            // clean up
+            $cookieStore.remove ('userSession');
         });
 
     });

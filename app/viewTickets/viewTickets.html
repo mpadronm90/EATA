@@ -1,0 +1,32 @@
+<div class="container-fluid col-sm-8 col-sm-offset-2">
+    <div class="card text-center">
+        <div class="card-header">
+            {{event.name}}
+        </div>
+        <div class="card-block">
+            <h4 class="card-title">{{event.description}}</h4>
+            <a href="#!/viewEvents" class="btn btn-primary">Ver mas eventos</a>
+        </div>
+        <div class="card-footer text-muted">
+            {{event.date | date: "dd/MM/yyyy"}}
+        </div>
+    </div>
+<br/>
+    <div class="row">
+        <div class="col-sm-4" ng-repeat="ticket in tickets | Customfilter: filter">
+            <div class="card">
+                <div class="card-block">
+                    <h3 class="card-title">{{ticket.name}}</h3>
+                    <p class="card-text">{{ticket.description}}</p>
+                    <p class="card-text">Se pueden solicitar desde {{ticket.minimum}} y hasta un máximo de {{ticket.maximum}} tickets por pedido</p>
+                    <form name="ticketForm" class="form-inline my-2 my-lg-1" ng-submit="addToCar(ticket)" >
+                        <h6 class="my-2 my-sm-1">{{ticket.price | currency : "€"}}</h6>&nbsp;
+                        <input class="form-control mr-sm-2" type="number" min={{ticket.minimum}} max={{ticket.maximum}} ng-model="ticket.toBuy" ng-init="ticket.toBuy=ticket.minimum" required>
+                        <button class="btn btn-outline-primary my-2 my-sm-0" ng-class="{'btn-outline-danger' : ticketForm.$invalid}" ng-disabled="ticketForm.$invalid" type="submit"><i class="fa fa-cart-arrow-down fa-lg" aria-hidden="true"></i></button>
+                    </form>
+                </div>
+            </div>
+            <br/>
+        </div>
+    </div>
+</div>

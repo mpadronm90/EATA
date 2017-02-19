@@ -3,7 +3,7 @@
  */
 'use strict';
 
-angular.module('myApp.viewEvents', ['ngRoute', 'myApp.services', 'http-auth-interceptor'])
+angular.module('myApp.viewEvents', ['ngRoute', 'myApp.services'])
 
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider
@@ -13,7 +13,26 @@ angular.module('myApp.viewEvents', ['ngRoute', 'myApp.services', 'http-auth-inte
             });
     }])
 
-    .controller('ViewEvents', ['$scope', 'apiEata', '$http', 'authService', function($scope, apiEata, $http, authService) {
+    .controller('ViewEvents', ['$scope', 'apiEata', '$location','$rootScope','$cookieStore', function($scope, apiEata, $location, $rootScope, $cookieStore) {
 
+        $scope.events = {};
 
-    }]);
+        init()
+
+        function init(){
+           events()
+           $rootScope.car = $cookieStore.get('car')
+        }
+
+        function events(){
+            apiEata.events()
+                .then(function(data){
+                    console.log(data)
+                    $scope.events = data.data;
+                })
+                .catch(function(error){
+                    $location.url('/viewAuth');
+                })
+        }
+
+    }])

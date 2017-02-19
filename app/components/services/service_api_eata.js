@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('myApp.services', [])
-    .factory('apiEata', function($http, $q){
+    .factory('apiEata', function($http, $q, $cookieStore){
 
         var service = {};
 
@@ -12,11 +12,17 @@ angular.module('myApp.services', [])
 
         service.login = login;
         service.events = events;
-        service.ticketsByEvent = ticketsByEvent;
-        service.createOrder = createOrder;
+        service.event = event;
+        service.tickets = tickets;
+        service.order = createOrder;
 
 
         return service;
+
+        function setHeader(){
+            var userSession = $cookieStore.get('userSession') ? $cookieStore.get('userSession') : {}
+            $http.defaults.headers.common.Authorization = 'Bearer '+$cookieStore.get('userSession').access_token;
+        }
 
         function login (user) {
             var defer = $q.defer();
@@ -24,7 +30,7 @@ angular.module('myApp.services', [])
 
             $http.post(service.pathUrl+'oauth/token/user', {"username": user.username,"password": user.password})
                 .then(function(data){
-                    defer.resolve(data.data.access_token);
+                    defer.resolve(data);
                 })
                 .catch(function(error){
                     defer.reject(error);
@@ -34,15 +40,29 @@ angular.module('myApp.services', [])
         }
 
         function events(){
+            setHeader();
             return $http.get(service.pathUrl+'events');
         };
 
-        function ticketsByEvent(event){
-            return $http.get(service.pathUrl+event+'/tickets');
+        function event(event){
+            setHeader()
+            return $http.get(service.pathUrl+'events/'+event);
+        };
+
+        function tickets(event){
+            setHeader()
+            return $http.get(service.pathUrl+'events/'+event+'/tickets');
         };
 
         function createOrder(order){
-            return $http.post(service.pathUrl+'orders',[order, order.name, order.lastname, order.documentId, order.zipcode, order.lines]);
+            setHeader()
+            return $http.post(service.pathUrl+'orders',order);
         }
+        //
+        // function createOrder(order){
+        //     return $http.post(service.pathUrl+'orders',[order, order.name, order.lastname, order.documentId, order.zipcode, order.lines]);
+        // }
+
+
 
     });
