@@ -5,10 +5,9 @@ angular.module('myApp', [
   'ngRoute',
   'ngCookies',
   'ui-notification',
+  'angular.filter',
   // 'ngAnimate',
   // 'ngTouch',
-  // 'ui.bootstrap',
-  'angularModalService',
   'myApp.view1',
   'myApp.view2',
   'myApp.viewAuth',
@@ -16,7 +15,8 @@ angular.module('myApp', [
   'myApp.services',
   'myApp.viewEvents',
   'myApp.viewTickets',
-  'myApp.viewShop'
+  'myApp.viewShop',
+  'myApp.viewInform'
 
 ])
     .config(['$locationProvider', '$routeProvider', '$httpProvider', 'NotificationProvider',function($locationProvider, $routeProvider, $httpProvider, NotificationProvider) {

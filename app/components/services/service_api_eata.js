@@ -15,12 +15,13 @@ angular.module('myApp.services', [])
         service.event = event;
         service.tickets = tickets;
         service.order = createOrder;
+        service.orders = orders;
 
 
         return service;
 
         function setHeader(){
-            var userSession = $cookieStore.get('userSession') ? $cookieStore.get('userSession') : {}
+            // var userSession = $cookieStore.get('userSession') ? $cookieStore.get('userSession') : {} todo quitar
             $http.defaults.headers.common.Authorization = 'Bearer '+$cookieStore.get('userSession').access_token;
         }
 
@@ -58,10 +59,11 @@ angular.module('myApp.services', [])
             setHeader()
             return $http.post(service.pathUrl+'orders',order);
         }
-        //
-        // function createOrder(order){
-        //     return $http.post(service.pathUrl+'orders',[order, order.name, order.lastname, order.documentId, order.zipcode, order.lines]);
-        // }
+
+        function orders(){
+            setHeader()
+            return $http.get(service.pathUrl+'orders');
+        }
 
 
 
