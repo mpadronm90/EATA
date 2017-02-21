@@ -6,10 +6,8 @@ angular.module('myApp', [
   'ngCookies',
   'ui-notification',
   'angular.filter',
-  // 'ngAnimate',
-  // 'ngTouch',
-  'myApp.view1',
-  'myApp.view2',
+  'ngAnimate',
+  'ngTouch',
   'myApp.viewAuth',
   'myApp.version',
   'myApp.services',
@@ -19,11 +17,12 @@ angular.module('myApp', [
   'myApp.viewInform'
 
 ])
-    .config(['$locationProvider', '$routeProvider', '$httpProvider', 'NotificationProvider',function($locationProvider, $routeProvider, $httpProvider, NotificationProvider) {
+    .config(['$locationProvider', '$routeProvider', '$httpProvider', 'NotificationProvider', function($locationProvider, $routeProvider, $httpProvider, NotificationProvider, $q) {
         $locationProvider.hashPrefix('!');
-        $routeProvider.otherwise({redirectTo: '/view1'});
+        $routeProvider.otherwise({redirectTo: '/viewEvents'});
         $httpProvider.defaults.headers.common['Content-Type'] = 'application/json';
 
+        $httpProvider.interceptors.push('httpRequestInterceptor');
 
         NotificationProvider.setOptions({
             delay: 3000,
@@ -32,10 +31,7 @@ angular.module('myApp', [
             verticalSpacing: 20,
             horizontalSpacing: 20,
             positionX: 'right',
-            positionY: 'top'
+            positionY: 'bottom'
         });
-    }])
-    .run(['$rootScope', '$injector','$location', function($rootScope,$injector, $location) {
-
 
     }]);

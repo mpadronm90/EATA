@@ -14,12 +14,15 @@ angular.module('myApp.viewAuth', ['ngRoute', 'myApp.services'])
     }])
 
     .controller('ViewAuth', ['$scope', 'apiEata', '$location', '$cookieStore','$rootScope', function($scope, apiEata, $location, $cookieStore, $rootScope) {
-        $scope.user = {}
-        $scope.login = login
+
+        $scope.user = null
+        $scope.login = null
 
         init()
 
         function init(){
+            $rootScope.car = 0;
+            $scope.login = login
             if($cookieStore.get('userSession'))
                 $scope.user = {'username': $cookieStore.get('userSession').user, 'password': $cookieStore.get('userSession').pass}
         }

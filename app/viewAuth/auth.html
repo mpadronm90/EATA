@@ -1,13 +1,13 @@
 <div class = "container col-sm-4 col-sm-offset-2">
-    <div class="page-header"><h2>Tienes las Entradas a tu Alcance</h2></div>
+    <div class="page-header"><h2>Tenemos muchos Eventos</h2></div>
     <form name="auth" ng-submit="login(auth.$valid)" novalidate>
         <div id="messages" class="alert alert-danger" ng-show="messages" ng-bind="messages"></div>
-        <div class="form-group" ng-class="(auth.user.$touched && user.username == '')? 'has-danger' : 'has-success'">
+        <div class="form-group" ng-class="(!auth.user.$pristine && user.username == null)? 'has-danger' : 'has-default'">
             <label for="user">Usuario</label>
             <input type="text" class="form-control" id="user" name="user" placeholder="Introduzca el usuario" ng-model="user.username" ng-change="messages=null" required/>
 
         </div>
-        <div class="form-group" ng-class="(!auth.Password.$pristine && user.password == '')? 'has-danger' : 'has-success'">
+        <div class="form-group" ng-class="(!auth.Password.$pristine && user.password == null)? 'has-danger' : 'has-default'">
             <label for="Password">Contraseña</label>
             <input type="password" class="form-control" id="Password" name="Password" placeholder="Introduzca la contraseña" ng-model="user.password" ng-change="messages=null" required/>
         </div>

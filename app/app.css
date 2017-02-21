@@ -71,3 +71,34 @@ nav p,nav a, nav h1, footer p, footer a{
   -webkit-box-shadow: 10px 5px 5px 2px #3D5B7D;
   box-shadow: 10px 5px 5px 2px #3D5B7D;
 }
+
+/*Animaciones para las cards de Bootstrap*/
+
+
+
+.fade {
+  position: absolute;
+  top: 4;
+  left: 0;
+  right: 0;
+  height: 100%;
+  opacity: 1;
+}
+.fade.ng-enter,
+.fade.ng-leave {
+  -webkit-transition: all 1s ease;
+  transition: all 1s ease;
+}
+.fade.ng-enter {
+  opacity: 0;
+}
+.fade.ng-enter-active {
+  opacity: 1;
+}
+.fade.ng-leave {
+  opacity: 1;
+}
+.fade.ng-leave-active {
+  opacity: 0;
+}
+

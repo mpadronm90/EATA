@@ -21,8 +21,8 @@ angular.module('myApp.services', [])
         return service;
 
         function setHeader(){
-            // var userSession = $cookieStore.get('userSession') ? $cookieStore.get('userSession') : {} todo quitar
-            $http.defaults.headers.common.Authorization = 'Bearer '+$cookieStore.get('userSession').access_token;
+             var userSession = $cookieStore.get('userSession') ? $cookieStore.get('userSession') : {"access_token": null}
+            $http.defaults.headers.common.Authorization = 'Bearer '+userSession.access_token;
         }
 
         function login (user) {

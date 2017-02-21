@@ -15,7 +15,7 @@ angular.module('myApp.viewEvents', ['ngRoute', 'myApp.services'])
 
     .controller('ViewEvents', ['$scope', 'apiEata', '$location','$rootScope','$cookieStore', function($scope, apiEata, $location, $rootScope, $cookieStore) {
 
-        $scope.events = {};
+        $scope.events = null;
 
         init()
 
@@ -31,7 +31,7 @@ angular.module('myApp.viewEvents', ['ngRoute', 'myApp.services'])
                     $scope.events = data.data;
                 })
                 .catch(function(error){
-                    $location.url('/viewAuth');
+                    //$location.url('/viewAuth');
                 })
         }
 

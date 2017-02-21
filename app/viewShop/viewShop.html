@@ -2,7 +2,7 @@
 <div class="container-fluid col-sm-8 col-sm-offset-2">
     <div ng-show="!car[0]" class="card">
         <div class="card-block">
-            <h1 class="card-title">Upss...</h1>
+            <h1 class="card-title">{{title}}</h1>
             <hr/>
             <h5 class="card-text">Estamos llenos de sorpresas. Accede a nuestros eventos y traetelas por acá.</h5>
             <hr/>
@@ -18,23 +18,22 @@
                     <h6 class="card-text">Total: {{car | sumPriceChoose | currency: "€"}}</h6>
                     <hr/>
                     <form name="orderForm" ng-submit="buy()" novalidate>
-                        <!--<div id="messages" class="alert alert-danger" ng-show="messages" ng-bind="messages"></div>-->
-                        <div class="form-group" ng-class="order.name == null? 'has-danger' : 'has-success'">
+                        <div class="form-group" ng-class="(!orderForm.name.$pristine && order.name == null)? 'has-danger' : 'has-default'">
                             <label for="name">Nombre</label>
-                            <input type="text" class="form-control danger" id="name" name="name" ng-model="order.name" ng-change="messages=null" required/>
+                            <input type="text" class="form-control danger" id="name" name="name" ng-model="order.name"  required/>
 
                         </div>
-                        <div class="form-group" ng-class="order.lastname == null? 'has-danger' : 'has-success'">
+                        <div class="form-group" ng-class="(!orderForm.lastname.$pristine && order.lastname == null)? 'has-danger' : 'has-default'">
                             <label for="lastname">Apellidos</label>
-                            <input type="text" class="form-control" id="lastname" name="lastname"  ng-model="order.lastname" ng-change="messages=null" required/>
+                            <input type="text" class="form-control" id="lastname" name="lastname"  ng-model="order.lastname"  required/>
                         </div>
-                        <div class="form-group" ng-class="(orderForm.name.$touched && order.documentId == null)? 'has-danger' : 'has-success'">
+                        <div class="form-group" ng-class="(!orderForm.documentId.$pristine && order.documentId == null)? 'has-danger' : 'has-default'">
                             <label for="documentId">Documento de identidad</label>
-                            <input type="text" class="form-control" id="documentId" name="documentId"  ng-model="order.documentId" ng-change="messages=null" required/>
+                            <input type="text" class="form-control" id="documentId" name="documentId"  ng-model="order.documentId"  required/>
                         </div>
-                        <div class="form-group" ng-class="(orderForm.name.$touched && order.zipcode == null)? 'has-danger' : 'has-success'">
+                        <div class="form-group" ng-class="(!orderForm.zipcode.$pristine && order.zipcode == null)? 'has-danger' : 'has-default'">
                             <label for="zipcode">Código Póstal</label>
-                            <input type="number" class="form-control" id="zipcode" name="zipcode"  ng-model="order.zipcode" ng-change="messages=null" required/>
+                            <input type="number" class="form-control" id="zipcode" name="zipcode"  ng-model="order.zipcode" ng-minlength=5 ng-maxlength=5 required/>
                         </div>
 
                         <button type="submit" ng-disabled="orderForm.$invalid"  class="btn btn-outline-primary" >Realizar Pedido</button>
@@ -58,9 +57,11 @@
                             <div class="col-sm-5">
                                 <h5 class="card-title">{{ticket.name}}</h5>
                                 <p class="card-text">Cantidad: {{ticket.toBuy}}</p>
+
                             </div>
                             <div class="col-sm-2">
-                                <a class="btn btn-outline-danger" ng-click="remove(ticket)"><i class="fa fa-trash-o fa-lg" aria-hidden="true"></i></a>
+                                <p class="card-text">Precio {{ticket.price | currency: '€'}}</p>
+                                <btn class="btn btn-outline-danger" ng-click="remove(ticket)"><i class="fa fa-trash-o fa-lg" aria-hidden="true"></i></>
                             </div>
                         </div>
                     </blockquote>

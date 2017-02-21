@@ -15,13 +15,20 @@ angular.module('myApp.viewShop', ['ngRoute', 'myApp.services'])
 
     .controller('ViewShop', ['$scope', 'apiEata', '$location','$rootScope','$cookieStore','Notification', function($scope, apiEata, $location, $rootScope, $cookieStore, Notification) {
 
-        $scope.buy = buy;
-        $scope.remove = deleteItemFromCar
+        $scope.buy = null;
+        $scope.remove = null
+        $scope.title = null
+        $scope.order = {}
 
         init()
 
         function init(){
-            $rootScope.car = $cookieStore.get('car')
+            if(validatePerson()){
+                $rootScope.car = $cookieStore.get('car')
+                $scope.buy = buy;
+                $scope.remove = deleteItemFromCar
+                $scope.title = 'Tu carrito esta vacío'
+            }
         }
 
         function buy(){
@@ -34,11 +41,12 @@ angular.module('myApp.viewShop', ['ngRoute', 'myApp.services'])
                         console.log(result)
                         Notification.success('La orden se ha concretado');
                         deleteCarTickets(items)
+                        $scope.title = 'Gracias por elegirnos!'
                     })
                     .catch(function(error){
                         console.log(error)
                         Notification.error({message: 'No se ha podido concretar la operación. Vuelva a Loguearse'});
-                        $location.url('/viewAuth')
+
                     })
             }
             else{
@@ -72,6 +80,13 @@ angular.module('myApp.viewShop', ['ngRoute', 'myApp.services'])
         function deleteItemFromCar(object){
             $rootScope.car.splice($rootScope.car.indexOf(object), 1)
             $cookieStore.put('car', $rootScope.car)
+        }
+
+        function validatePerson(){
+            if($cookieStore.get('userSession').access_token == null){
+                $location.url('/viewAuth')
+            }
+            else return true
         }
 
     }]);

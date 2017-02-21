@@ -15,9 +15,9 @@ angular.module('myApp.viewTickets', ['ngRoute', 'myApp.services'])
 
     .controller('ViewTickets', ['$scope', 'apiEata', '$location','$routeParams', '$rootScope', 'Notification', '$cookieStore', function($scope, apiEata, $location, $routeParams, $rootScope, Notification, $cookieStore) {
 
-        $scope.event = {}
-        $scope.tickets = {}
-        $scope.addToCar = addToCar
+        $scope.event = null
+        $scope.tickets = null
+        $scope.addToCar = null
 
         init()
 
@@ -25,6 +25,7 @@ angular.module('myApp.viewTickets', ['ngRoute', 'myApp.services'])
             event();
             tickets();
             $rootScope.car = $cookieStore.get('car')
+            $scope.addToCar = addToCar
         }
 
         function event(){
@@ -36,7 +37,7 @@ angular.module('myApp.viewTickets', ['ngRoute', 'myApp.services'])
                 .catch(function(error){
                     console.log(error)
                     $scope.event = {}
-                    $location.url('/viewAuth');
+                    //$location.url('/viewAuth');
                 })
         }
 
@@ -51,7 +52,7 @@ angular.module('myApp.viewTickets', ['ngRoute', 'myApp.services'])
                 .catch(function(error){
                     console.log(error)
                     $scope.tickets = {}
-                    $location.url('/viewAuth');
+                    //$location.url('/viewAuth');
                 })
         }
 

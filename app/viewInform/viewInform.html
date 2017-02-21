@@ -1,51 +1,66 @@
 <div class="container-fluid col-sm-8 col-sm-offset-2">
     <div class =row>
         <div class="col-sm-4 mb-3">
-            <div ng-show="car[0]" class="card">
+            <div class="card mb-3" >
                 <div class="card-block">
-                    <h4 class="card-title">Histórico de compras</h4>
+                    <h4 class="card-title">Histórico</h4>
                     <hr/>
                     <ul>
-                        <a href class="btn mb-3" ng-init="informe = 1" ng-click="informe = 1">Informe por eventos</a>
-
-                        <a href class="btn mb-3" ng-click="informe = 2">Informe por meses</a>
+                    <li><a href class="card-text  mb-3" ng-init="informe = 1; groupType = 'event'" ng-click="inform(1)">Informe por eventos</a></li>
+                    <li><a href class="card-text  mb-3" ng-click="informe = 2; groupType = 'date'">Informe por meses</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card mb-3" >
+                <div class="card-block">
+                    <h4 class="card-title">Informe ordenado</h4>
+                    <hr/>
+                    <ul>
+                        <li><a href class="card-text mb-3" ng-click="orderTypeFunc('total')">Por ventas</a></li>
+                        <li><a href class="card-text mb-3" ng-click="orderTypeFunc('$key')">Por nombre del evento</a></li>
+                        <!--<li><a href class="card-text mb-3" ng-click="orderTypeFunc('date')">Por fecha</a></li>-->
+                    </ul>
+                    <hr/>
+                    <ul>
+                        <li><a href class="card-text mb-3" ng-click="orderDescAsc(false)">De forma descendente</a></li>
+                        <li><a href class="card-text mb-3" ng-click="orderDescAsc(true)">De forma ascendente</a></li>
                     </ul>
                 </div>
             </div>
         </div>
-        <div class="col-sm-8">
-            <div ng-show="informe == 1" class="card mb-3" ng-repeat="group in orders | groupBy: 'lines[0].ticket.event.name' | toArray:true | orderBy: '$key'">
-                <h2 class="card-header">Informe por eventos</h2>
+        <div class="col-sm-6">
+            <div ng-show="informe == 2" class="card mb-3">
+                <h2 class="card-header">En próximas versiones!</h2>
+            </div>
+            <div ng-show="informe == 1" class="card mb-3" ng-repeat="group in orders | map: restructurationForInform | customGroupBy: groupType | orderBy: orderType | reverse: desc">
+                <h2 class="card-header">Informe por {{orderTypeComment}}</h2>
                 <div class="card-block">
                     <div class="card-text">
                         <h3>{{group.$key}}</h3>
+                        <h6>Cantidad de entradas vendidas: {{group.quantity}}</h6>
+                        <h7>Total vendido: {{group.total | currency: "€"}}</h7>
                     </div>
                     <br/>
-                    <div ng-repeat="order in group"> <!--todo  | SumLinesInOrder-->
-                        <div class="card-title">
-                            <h7>Orden - {{order.id}}</h7>
-                        </div>
-                        <div class="card-blockquote">
-                            <table class="table table-striped table-responsive">
-                                <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>First Name</th>
-                                    <th>Last Name</th>
-                                    <th>Username</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    <table class="table table-striped table-responsive">
+                        <thead>
+                        <tr>
+                            <th>Pedido</th>
+                            <th>Entrada</th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>
+                            <th>Total</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr align="center" ng-repeat="order in group | Customfilter: filter">
+                            <td>{{order.order}}</td>
+                            <td>{{order.ticket}}</td>
+                            <td>{{order.quantity}}</td>
+                            <td>{{order.price}}</td>
+                            <td>{{order.total}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
