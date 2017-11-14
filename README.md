@@ -1,7 +1,7 @@
 Entradas a tu Alcance
 =====================
 
-FrontEnd test para una interesante StartUp
+Frontend of EATA TEST
 
 Deploy en local
 ==============
